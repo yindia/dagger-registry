@@ -29,3 +29,5 @@ dagger do register -l debug --log-format plain --with 'actions: params: image: t
 # Fast Register will not work because of storage, Waiting for the issue https://github.com/flyteorg/flyte/issues/2263
 dagger do fast_register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: flyteEndpoint:  "dns:///dagger.flyte.org"'
 ```
+
+NOTE: Currently It doesn't support sandbox because of some limitation[WIP] 
