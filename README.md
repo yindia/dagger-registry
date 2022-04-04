@@ -1,15 +1,31 @@
 # dagger-flyte
 
-A template for the recommended layout of a Flyte enabled repository for code written in python using [flytekit](https://docs.flyte.org/projects/flytekit/en/latest/).
+[![asciicast](https://asciinema.org/a/9shHclgS4u46dLA1gIvsh9ATd.svg)](https://asciinema.org/a/9shHclgS4u46dLA1gIvsh9ATd)
 
-## Usage
+## Getting Started
+- Follow the steps to register the package
 
-To get up and running with your Flyte project, we recommend following the
-[Flyte getting started guide](https://docs.flyte.org/en/latest/getting_started.html).
+```bash
+# Install dagger(https://docs.dagger.io/1200/local-dev)
 
+# Add secret in env
+export REGISTRY_USER=${YOUR_DOCKER_REGISTER_USERNAME}
+export REGISTRY_TOKEN=${YOUR_DOCKER_REGISTER_TOKEN}
+export CLIENT_SECRET=${YOUR_FLYTE_CLUSTER_CLIENT_TOKEN}
+export CLIENT_ID=${YOUR_FLYTE_CLUSTER_CLIENT_ID}
 
-## NOTE
-1. This APP name is also added to ``docker_build_and_tag.sh`` - ``APP_NAME``
-2. We recommend using a git repository and this the ``docker_build_and_tag.sh``
-   to build your docker images
-3. We also recommend using pip-compile to build your requirements.
+# Update the flyte cluster url & clientID in your config.yaml
+
+# Setup is ready, You don't need anything else
+dagger project update
+
+# Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
+dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
+
+# Register the package (It will first serialize the package and then register it with flyte cluster)
+dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: flyteEndpoint:  "dns:///dagger.flyte.org"'
+
+# Fast Register the package (It will first fast serialize the package and then fast register it with flyte cluster)
+# Fast Register will not work because of storage, Waiting for the issue https://github.com/flyteorg/flyte/issues/2263
+dagger do fast_register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: flyteEndpoint:  "dns:///dagger.flyte.org"'
+```

@@ -1,7 +1,4 @@
 admin:
-  # For GRPC endpoints you might want to use dns:///flyte.myexample.com
-  endpoint: dns:///flyte.org
-  clientId: "**********"
   authType: ClientSecret
   insecure: false
 logger:
