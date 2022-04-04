@@ -27,4 +27,4 @@ jobs:
         uses: dagger/dagger-for-github@v2
         with:
           workdir: "."
-          args: "do build -l debug --log-format plain --with 'actions: params: image: tag: \"v0.2.0\"'"
+          args: "do build -l debug --log-format plain"
