@@ -42,17 +42,14 @@ jobs:
       - name: Update Project
         uses: dagger/dagger-for-github@v2
         with:
+          install-only: true
           workdir: "."
           args: project update
 
       - name: Build & Push Docker Images
-        uses: dagger/dagger-for-github@v2
-        with:
-          workdir: "."
-          args: "do push -l debug --with 'actions: params: image: tag: \"${{ needs.bump_version.outputs.version }}\"' --with 'actions: params: flyteEndpoint:  \"${{ secrets.EVALSCKET_PAT }}\"'"
+        run: |
+          dagger do push -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
 
       - name: Serialize & Register Package
-        uses: dagger/dagger-for-github@v2
-        with:
-          workdir: "."
-          args: "do register -l debug --with 'actions: params: image: tag: \"${{ needs.bump_version.outputs.version }}\"' --with 'actions: params: flyteEndpoint:  \"${{ secrets.EVALSCKET_PAT }}\"'"
+        run: |
+          dagger do register -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
