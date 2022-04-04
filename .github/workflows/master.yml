@@ -48,8 +48,8 @@ jobs:
 
       - name: Build & Push Docker Images
         run: |
-          dagger do push -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
+          /opt/hostedtoolcache/dagger/0.2.4/x64/dagger do push -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
 
       - name: Serialize & Register Package
         run: |
-          dagger do register -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
+          /opt/hostedtoolcache/dagger/0.2.4/x64/dagger do register -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
