@@ -30,7 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.EVALSCKET_PAT }}
           WITH_V: true
-          RELEASE_BRANCHES: ci
+          RELEASE_BRANCHES: main
 
   dagger:
     runs-on: ubuntu-latest
@@ -43,14 +43,12 @@ jobs:
         uses: dagger/dagger-for-github@v2
         with:
           install-only: true
-          workdir: "."
-          args: project update
 
       - name: Build & Push Docker Images
         run: |
           dagger project update
-          dagger do push -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
+          dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"'
 
       - name: Serialize & Register Package
         run: |
-          dagger do register -l debug --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"' --with 'actions: params: flyteEndpoint:  "${{ secrets.EVALSCKET_PAT }}"'
+          dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "${{ needs.bump_version.outputs.version }}"'
