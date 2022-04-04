@@ -1,4 +1,4 @@
-name: Pull request check
+name: Release
 
 on:
   push:
@@ -45,7 +45,13 @@ jobs:
           workdir: "."
           args: project update
 
-      - name: Build, Push, Serialize & Register Package
+      - name: Build & Push Docker Images
+        uses: dagger/dagger-for-github@v2
+        with:
+          workdir: "."
+          args: "do push -l debug --log-format plain --with 'actions: params: image: tag: \"${{ needs.bump_version.outputs.version }}\"' --with 'actions: params: flyteEndpoint:  \"${{ secrets.EVALSCKET_PAT }}\"'"
+
+      - name: Serialize & Register Package
         uses: dagger/dagger-for-github@v2
         with:
           workdir: "."
