@@ -3,4 +3,4 @@ admin:
   insecure: false
 logger:
   show-source: true
-  level: 0
+  level: 6
