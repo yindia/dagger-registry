@@ -2,6 +2,7 @@ package flyte
 
 import (
 	"dagger.io/dagger"
+	"dagger.io/dagger/core"
 	"universe.dagger.io/docker"
 	"universe.dagger.io/bash"
 )
@@ -17,6 +18,9 @@ dagger.#Plan & {
 					"LICENSE",
 				]
 			}
+			".": write: {
+				contents: actions.serialize.contents.output
+			}
 		}
         network: "unix:///var/run/docker.sock": connect: dagger.#Socket
         env: {
@@ -24,6 +28,7 @@ dagger.#Plan & {
             REGISTRY_TOKEN: dagger.#Secret
             CLIENT_SECRET: dagger.#Secret
             CLIENT_ID: dagger.#Secret
+            FLYTE_ENDPOINT: dagger.#Secret
         }
 	}
 	actions: {
@@ -36,7 +41,6 @@ dagger.#Plan & {
 		  project: string | *"flytesnacks"
 		  domain: string | *"development"
 		  flytectlConfig: string | *"config.yaml"
-		  flyteEndpoint: string | *"dns:///flyte.org"
 		}
 		build: docker.#Dockerfile & {
 			source: client.filesystem.".".read.contents
@@ -49,26 +53,30 @@ dagger.#Plan & {
             	secret: client.env.REGISTRY_TOKEN
           	}
 		}
-		serialize: docker.#Run & {
-			input: build.output
-			workdir: "/root"
-			command: {
-				name: "pyflyte"
-				args: ["--pkgs", params.packages, "package", "--image", "\(params.image.ref):\(params.image.tag)", "-f"]
+		serialize: {
+			serialize_package: docker.#Run & {
+				input: build.output
+				workdir: "/root"
+				command: {
+					name: "pyflyte"
+					args: ["--pkgs", params.packages, "package", "--image", "\(params.image.ref):\(params.image.tag)", "-f"]
+				}
+				export: files: {
+					"/root/flyte-package.tgz": _ & {
+						contents: "/root/flyte-package.tgz"
+					},
+				}
 			}
-			export: files: "/root/flyte-package.tgz": string
-		}
-		fast_serialize: docker.#Run & {
-			input: build.output
-			workdir: "/root"
-			command: {
-				name: "pyflyte"
-				args: ["--pkgs", params.packages, "package", "--image", "\(params.image.ref):\(params.image.tag)", "--fast", "-f"]
+
+			contents: core.#Subdir & {
+				input: serialize_package.output.rootfs
+				path:  "/root/flyte-package.tgz"
 			}
-			export: files: "/root/flyte-package.tgz": string
 		}
+	    // TODO(Yuvraj) Currently Fast Register needs more configuration for blob storage, Will work without any issue after https://github.com/flyteorg/flyte/issues/2263
 		register: bash.#Run & {
 			input: serialize.output
+			workdir: "/root"
 			script: contents: "echo ${CLIENT_SECRET} >> /tmp/secret && flytectl register files --archive -p ${PROJECT} -d ${DOMAIN} flyte-package.tgz --config=${CONFIG_FILE} --admin.endpoint=${FLYTE_ENDPOINT} --admin.clientId=${CLIENT_ID}  --admin.clientSecretLocation=/tmp/secret --version=${VERSION}"
 			env: {
 				PROJECT: params.project
@@ -77,21 +85,7 @@ dagger.#Plan & {
 				CLIENT_SECRET: client.env.CLIENT_SECRET
 				CLIENT_ID: client.env.CLIENT_ID
 				VERSION: params.image.tag
-				FLYTE_ENDPOINT: params.flyteEndpoint
-			}
-		}
-		// TODO(Yuvraj) Currently it needs more configuration for blob storage, Will work without any issue after https://github.com/flyteorg/flyte/issues/2263
-		fast_register: bash.#Run & {
-			input: fast_serialize.output
-			script: contents: "echo ${CLIENT_SECRET} >> /tmp/secret && flytectl register files --archive -p ${PROJECT} -d ${DOMAIN} flyte-package.tgz --config=${CONFIG_FILE} --admin.endpoint=${FLYTE_ENDPOINT} --admin.clientId=${CLIENT_ID}  --admin.clientSecretLocation=/tmp/secret --version=${VERSION}"
-			env: {
-				PROJECT: params.project
-				DOMAIN: params.domain
-				CONFIG_FILE: params.flytectlConfig
-				CLIENT_SECRET: client.env.CLIENT_SECRET
-				CLIENT_ID: client.env.CLIENT_ID
-				VERSION: params.image.tag
-				FLYTE_ENDPOINT: params.flyteEndpoint
+				FLYTE_ENDPOINT: client.env.FLYTE_ENDPOINT
 			}
 		}
 	}

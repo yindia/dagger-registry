@@ -23,9 +23,9 @@ dagger project update
 dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
 
 # Register the package (It will first serialize the package and then register it with flyte cluster)
-dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: flyteEndpoint:  "dns:///dagger.flyte.org"'
+dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
 
 # Fast Register the package (It will first fast serialize the package and then fast register it with flyte cluster)
 # Fast Register will not work because of storage, Waiting for the issue https://github.com/flyteorg/flyte/issues/2263
-dagger do fast_register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: flyteEndpoint:  "dns:///dagger.flyte.org"'
+dagger do fast_register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
 ```
