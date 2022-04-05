@@ -34,7 +34,7 @@ dagger.#Plan & {
 	actions: {
 		params: {
 		  image: {
-			  ref: string | *"docker.io/evalsocket/dagger-flyte"
+			  ref: string | *"dagger-flyte"
 			  tag: string | *"latest"
 		  }
 		  packages: string | *"flyte.workflows"
@@ -47,7 +47,7 @@ dagger.#Plan & {
 		}
 		push: docker.#Push & {
 			image: build.output
-          	dest: "\(params.image.ref):\(params.image.tag)"
+          	dest: "\(client.env.REGISTRY_USER)/\(params.image.ref):\(params.image.tag)"
           	auth: {
             	username: client.env.REGISTRY_USER
             	secret: client.env.REGISTRY_TOKEN
@@ -75,7 +75,7 @@ dagger.#Plan & {
 		}
 	    // TODO(Yuvraj) Currently Fast Register needs more configuration for blob storage, Will work without any issue after https://github.com/flyteorg/flyte/issues/2263
 		register: bash.#Run & {
-			input: serialize.output
+			input: serialize.serialize_package.output
 			workdir: "/root"
 			script: contents: "echo ${CLIENT_SECRET} >> /tmp/secret && flytectl register files --archive -p ${PROJECT} -d ${DOMAIN} flyte-package.tgz --config=${CONFIG_FILE} --admin.endpoint=${FLYTE_ENDPOINT} --admin.clientId=${CLIENT_ID}  --admin.clientSecretLocation=/tmp/secret --version=${VERSION}"
 			env: {
