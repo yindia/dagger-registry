@@ -1,17 +1,17 @@
 admin:
   # For GRPC endpoints you might want to use dns:///flyte.myexample.com
-  endpoint: dns:///localhost:30081
+  endpoint: dns:///127.0.0.1:30081
   authType: Pkce
   insecure: true
 logger:
   show-source: true
-  level: 0
+  level: 6
 storage:
   connection:
     access-key: minio
     auth-type: accesskey
     disable-ssl: true
-    endpoint: http://localhost:30084
+    endpoint: http://127.0.0.1:30084
     region: us-east-1
     secret-key: miniostorage
   type: minio
