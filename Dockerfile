@@ -26,8 +26,6 @@ RUN pip install -r /root/requirements.txt
 # Copy the actual code
 COPY . /root
 
-RUN curl -sL https://ctl.flyte.org/install | bash -s -- -b /usr/local/bin
-
 # This tag is supplied by the build script and will be used to determine the version
 # when registering tasks, workflows, and launch plans
 ARG tag
