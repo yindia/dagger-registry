@@ -56,5 +56,3 @@ dagger do push -l debug --log-format plain --with 'actions: params: image: tag: 
 # Register the package (It will first serialize the package and then register it with flyte cluster)
 dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
 ```
-
-NOTE: Currently It doesn't support sandbox because of some limitation[WIP]
