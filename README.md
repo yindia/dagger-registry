@@ -21,7 +21,7 @@ export CLIENT_ID="SANDBOX"
 export FLYTE_ENDPOINT="dns:///localhost:30081"
 
 # Setup is ready, You don't need anything else
-dagger project update
+dagger project update github.com/evalsocket/flyte@main
 
 # Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
 dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-flyte"'
