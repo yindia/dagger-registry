@@ -24,10 +24,13 @@ export FLYTE_ENDPOINT="dns:///localhost:30081"
 dagger project update
 
 # Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
-dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
+dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-flyte"'
 
 # Register the package (It will first serialize the package and then register it with flyte cluster)
 dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
+
+# Fast Register the package (It will first serialize the package and then register it with flyte cluster)
+dagger do fast_register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4-fast"'
 ```
 
 ## Getting Started (Remote Cluster)
@@ -48,7 +51,7 @@ export FLYTE_ENDPOINT=${YOUR_FLYTE_ENDPOINT}
 dagger project update
 
 # Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
-dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
+dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-flyte"'
 
 # Register the package (It will first serialize the package and then register it with flyte cluster)
 dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
