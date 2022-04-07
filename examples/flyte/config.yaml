@@ -1,5 +1,5 @@
 admin:
-  # For GRPC endpoints you might want to use dns:///opta-files.myexample.com
+  # For GRPC endpoints you might want to use dns:///flyte.myexample.com
   endpoint: dns:///127.0.0.1:30081
   authType: Pkce
   insecure: true

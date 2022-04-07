@@ -21,16 +21,22 @@ export CLIENT_ID="SANDBOX"
 export FLYTE_ENDPOINT="dns:///localhost:30081"
 
 # Setup is ready, You don't need anything else
-dagger project update github.com/evalsocket/opta-files@main
+dagger project update github.com/evalsocket/flyte@main
+dagger project update
+
 
 # Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
-dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-opta-files"'
+dagger do serialize -l debug --log-format plain --with 'actions: params: image_name: "docker.io/evalsocket/dagger-flyte:latest"'
 
-# Register the package (It will first serialize the package and then register it with opta-files cluster)
-dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
+# Register the package (It will first serialize the package and then register it with flyte cluster)
+dagger do register -l debug --log-format plain
 
-# Fast Register the package (It will first serialize the package and then register it with opta-files cluster)
-dagger do fast_register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4-fast"'
+# Fast Register the package (It will first serialize the package and then register it with flyte cluster)
+dagger do fast_serialize -l debug --log-format plain  --with 'actions: params: image_name: "docker.io/evalsocket/dagger-flyte:latest"'
+
+
+# Fast Register the package (It will first serialize the package and then register it with flyte cluster)
+dagger do fast_register -l debug --log-format plain
 ```
 
 ## Getting Started (Remote Cluster)
@@ -51,10 +57,8 @@ export FLYTE_ENDPOINT=${YOUR_FLYTE_ENDPOINT}
 dagger project update
 
 # Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
-dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-opta-files"'
+dagger do push -l debug --log-format plain --with 'actions: params: endpoint: "dns:///**********"' --with 'actions: params: image_name: "docker.io/evalsocket/dagger-flyte:latest"'
 
-# Register the package (It will first serialize the package and then register it with opta-files cluster)
-dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
+# Register the package (It will first serialize the package and then register it with flyte cluster)
+dagger do register -l debug --log-format plain
 ```
-
-NOTE: Currently It doesn't support sandbox because of some limitation[WIP]
