@@ -21,15 +21,15 @@ export CLIENT_ID="SANDBOX"
 export FLYTE_ENDPOINT="dns:///localhost:30081"
 
 # Setup is ready, You don't need anything else
-dagger project update github.com/evalsocket/flyte@main
+dagger project update github.com/evalsocket/opta-files@main
 
 # Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
-dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-flyte"'
+dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-opta-files"'
 
-# Register the package (It will first serialize the package and then register it with flyte cluster)
+# Register the package (It will first serialize the package and then register it with opta-files cluster)
 dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
 
-# Fast Register the package (It will first serialize the package and then register it with flyte cluster)
+# Fast Register the package (It will first serialize the package and then register it with opta-files cluster)
 dagger do fast_register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4-fast"'
 ```
 
@@ -51,9 +51,9 @@ export FLYTE_ENDPOINT=${YOUR_FLYTE_ENDPOINT}
 dagger project update
 
 # Build & Push image (It will build and push the docker images, If you just want tp build the images then use build in place of push)
-dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-flyte"'
+dagger do push -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"' --with 'actions: params: image: ref: "docker.io/evalsocket/dagger-opta-files"'
 
-# Register the package (It will first serialize the package and then register it with flyte cluster)
+# Register the package (It will first serialize the package and then register it with opta-files cluster)
 dagger do register -l debug --log-format plain --with 'actions: params: image: tag: "v0.0.4"'
 ```
 

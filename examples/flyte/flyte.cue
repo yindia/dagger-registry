@@ -12,7 +12,7 @@ dagger.#Plan & {
 				contents: dagger.#FS
 				exclude: [
 					"README.md",
-					"flyte.cue",
+					"opta-files.cue",
 					"LICENSE",
 				]
 			}
@@ -39,8 +39,8 @@ dagger.#Plan & {
 	}
 	actions: {
 		params: {
-		  dest: string | *"docker.io/evalsocket/dagger-flyte:latest"
-		  packages: string | *"flyte.workflows"
+		  dest: string | *"docker.io/evalsocket/dagger-opta-files:latest"
+		  packages: string | *"opta-files.workflows"
 		  project: string | *"flytesnacks"
 		  domain: string | *"development"
 		  config: string | *"config.yaml"
