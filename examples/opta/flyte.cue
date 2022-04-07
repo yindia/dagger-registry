@@ -12,7 +12,7 @@ dagger.#Plan & {
 				contents: dagger.#FS
 				include: [
 					"opta-files",
-					"flyte.cue",
+					"opta.cue",
 				]
 			}
 		}

@@ -12,7 +12,7 @@ dagger.#Plan & {
 				contents: dagger.#FS
 				exclude: [
 					"README.md",
-					"flyte.cue",
+					"opta.cue",
 					"LICENSE",
 				]
 			}
