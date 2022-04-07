@@ -1,0 +1,6 @@
+name: test
+modules:
+  - name: s3
+    type: aws-s3
+    bucket_name: "{parent_name}-{layer_name}"
+
