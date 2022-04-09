@@ -5,7 +5,6 @@ import (
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
 	"universe.dagger.io/docker"
-	"universe.dagger.io/aws"
 )
 
 #DefaultLinuxVersion: "amazonlinux:2.0.20220121.0@sha256:f3a37f84f2644095e2c6f6fdf2bf4dbf68d5436c51afcfbfa747a5de391d5d62"
@@ -80,26 +79,22 @@ import (
 	environment: string
 
 	// Opta extra cli flags used for this Opta program
-	extraArgs: string
+	extra_args: string
 
 	// Opta Config name used for this Opta program
-	configFile: string | *"opta-files.yaml"
-
-	// credentials provides long or short-term credentials
-	credentials: aws.#Credentials
+	config_file: string | *"opta-files.yaml"
 
 	// Run Opta apply
 	container: docker.#Run & {
 		input:  _build.output
 		command: {
-			name: "/scripts/opta-files.sh"
-			args: []
+			name: "/scripts/opta.sh"
 		}
 		env: {
 			ACTION:  action
-			ENV:  environment
-			CONFIG_FILE:  configFile
-			EXTRA_ARGS: extraArgs
+			ENVIRONMENT:  environment
+			CONFIG_FILE:  config_file
+			EXTRA_ARGS: extra_args
 		}
 		workdir: "/src"
 		mounts: scripts: {

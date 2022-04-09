@@ -5,9 +5,9 @@ set -xeo pipefail
 export  LC_ALL=en_US.utf-8
 env
 ENV_CMD=""
-if [[ $ENV != "" ]]
+if [[ $ENVIRONMENT != "" ]]
 then
-ENV_CMD="--env $ENV"
+ENV_CMD="--env $ENVIRONMENT"
 fi
 
 if [[ $ACTION == "apply" ||  ACTION == "destroy" ]]

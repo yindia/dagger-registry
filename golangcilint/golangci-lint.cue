@@ -2,12 +2,11 @@ package golangcilint
 
 import (
 	"dagger.io/dagger"
-	"dagger.io/dagger/core"
 	"universe.dagger.io/docker"
 )
 
 #DefaulGolangCILintImage: docker.#Pull & {
-	source: ""
+	source: "golangci/golangci-lint:v1.40.1-alpine"
 }
 
 // Lint a go package
@@ -18,9 +17,7 @@ import (
 
 	deadline: string | *"5m"
 
-	extraArgs:  string | *"-v"
-
-	package:  string | *"./..."
+	extraArgs: string | *""
 
 	_sourcePath: "/src"
 
@@ -28,8 +25,12 @@ import (
 		input:   _image.output
 		workdir: "/src"
 		command: {
-			name: "golangcilint"
-			args: ["run","./..." , "--deadline", deadline, extraArgs]
+			name: "sh"
+			flags: "-c": "golangci-lint run --deadline $DEADLINE $EXTRA_ARGS"
+		}
+		env: {
+			DEADLINE: deadline
+			EXTRA_ARGS: extraArgs
 		}
 		mounts: {
 			"source": {
